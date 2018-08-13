@@ -7,7 +7,7 @@ class Fetcher:
     def __init__(self, token):
         self.token = token
 
-    async def fetch_intraday_async(self, ticker, target_date, freq, session):
+    async def fetch_intraday(self, ticker, target_date, freq, session):
         target_date = target_date.strftime('%Y-%m-%d')
         url = 'https://api.tiingo.com/iex/{ticker}/prices?startDate={target_date}' \
               '&endDate={target_date}&resampleFreq={freq}&&token={token}' \
@@ -26,11 +26,11 @@ class Fetcher:
         tasks  = []
         async with aiohttp.ClientSession(loop=loop) as session:
             for date in period:
-                tasks.append(asyncio.ensure_future(self.fetch_intraday_async(ticker, date, freq, session)))
+                tasks.append(asyncio.ensure_future(self.fetch_intraday(ticker, date, freq, session)))
             await asyncio.gather(*tasks)
         return tasks
 
-    def get_time_series_async(self, ticker, start_date, end_date, freq, nObs):
+    def get_time_series(self, ticker, start_date, end_date, freq, nObs):
 
         loop    = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)

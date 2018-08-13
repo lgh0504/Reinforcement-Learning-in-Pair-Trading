@@ -49,7 +49,7 @@ print('Sync process time for {n} tickers: {time}s.'.format(n=len(ticker_list), t
 # Example for single ticker.
 ticker = 'AAPL'
 start  = time.time()
-ts     = fetcher.get_time_series_async(ticker, start_date, end_date, freq, nObs)
+ts     = fetcher.get_time_series(ticker, start_date, end_date, freq, nObs)
 end    = time.time()
 print('Async process time: {time}s.'.format(time=end-start))
 
@@ -57,6 +57,6 @@ print('Async process time: {time}s.'.format(time=end-start))
 # Example for multiple tickers.
 start = time.time()
 for ticker in ticker_list:
-    ts = fetcher.get_time_series_async(ticker, start_date, end_date, freq, nObs)
+    ts = fetcher.get_time_series(ticker, start_date, end_date, freq, nObs)
 end = time.time()
 print('Async process time for {n} tickers: {time}s.'.format(n=len(ticker_list), time=end-start))
