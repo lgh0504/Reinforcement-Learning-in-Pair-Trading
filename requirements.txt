@@ -3,5 +3,5 @@ numpy
 scipy
 matplotlib
 tensorflow
-requests
+aiohttp
 python_version=='3.6.6'
