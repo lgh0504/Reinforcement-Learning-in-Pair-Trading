@@ -10,7 +10,7 @@ freq       = '1min'
 start_date = '2018-01-01'
 end_date   = '2018-01-03'
 n_obs      = 391
-ticker     = 'MSFT'
+ticker     = 'AAPL'
 attr       = ['date', 'close']
 
 pairs = [['AAPL', 'MSFT'], ['BAC' , 'BK'  ], ['C'   , 'WFC' ],
