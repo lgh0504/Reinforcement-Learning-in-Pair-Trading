@@ -1,11 +1,10 @@
-import asyncio, aiohttp
+import asyncio
+import aiohttp
 
 
 async def create_tasks(loop, paras, func):
-    tasks = []
     async with aiohttp.ClientSession(loop=loop) as session:
-        for para in paras:
-            tasks.append(asyncio.ensure_future(func(session, **para)))
+        tasks = [asyncio.ensure_future(func(session, **para)) for para in paras]
         await asyncio.gather(*tasks)
     return tasks
 
