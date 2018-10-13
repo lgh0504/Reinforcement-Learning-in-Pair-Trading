@@ -5,7 +5,7 @@ from UTIL import aioutil, dateutil, fileutil
 from FACTORY import source
 
 
-token      = 'ef79e455ba9b04c3df719407e34f05e1b051b4d6'
+token      = 'YOUR_TOKEN'
 freq       = '1min'
 start_date = '2018-01-01'
 end_date   = '2018-01-03'
