@@ -1,9 +1,10 @@
 pandas
 numpy
 scipy
+sklearn
 matplotlib
 tensorflow
 aiohttp
 statsmodels
 patsy
-python_version=='3.6.6'
+python_version=='3.7'
