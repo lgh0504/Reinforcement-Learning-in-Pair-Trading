@@ -4,11 +4,10 @@ import pandas as pd
 import numpy as np
 
 
-class EGCoint(object):
+class Cointegration(object):
 
     def __init__(self, x, y, on, col_name):
-        self.x, self.y, self.time = EGCoint.clean_data(x, y, on, col_name)
-        self.alpha = None
+        self.x, self.y, self.timestamp = Cointegration.clean_data(x, y, on, col_name)
         self.beta  = None
         self.resid_mean = None
         self.resid_std  = None
@@ -25,7 +24,7 @@ class EGCoint(object):
                clean_df['date'].values
 
     def cal_spread(self, x, y):
-        resid      = y - (self.alpha + x * self.beta)
+        resid      = y - x * self.beta
         norm_resid = (resid - self.resid_mean)/self.resid_std
         return norm_resid
 
@@ -33,7 +32,7 @@ class EGCoint(object):
         assert start < end < len(self.x), 'Error:Invalid Indexing.'
         x_sample    = self.x[start:end]
         y_sample    = self.y[start:end]
-        time_sample = self.time[start:end]
+        time_sample = self.timestamp[start:end]
         return x_sample, y_sample, time_sample
 
     @staticmethod
@@ -50,9 +49,8 @@ class EGCoint(object):
 
     def run_ols(self, x, y):
         reg = LinearRegression().fit(x, y)
-        self.alpha = reg.intercept_
         self.beta  = reg.coef_[0]
-        resid = y - (self.alpha + self.beta * x)
+        resid = y - self.beta * x
         self.resid_mean = resid.mean()
         self.resid_std  = resid.std()
 
@@ -91,8 +89,11 @@ class EGCoint(object):
         time      = t_t1[ind_order]
         price     = spread_t1[ind_order]
         order     = order[ind_order]
+        x         = x[ind_order]
+        y         = y[ind_order]
+        gross_exp = y + abs(x) * self.beta
 
-        return time, price, order
+        return time, price, order, gross_exp
 
     @staticmethod
     def gen_trade_record(time, price, order):
@@ -146,10 +147,23 @@ class EGCoint(object):
 
         return trade_record
 
-    def run_episode(self, start_hist, end_hist, cl, start_forward, end_forward, trade_th, stop_loss):
+    @staticmethod
+    def get_indices(index, n_hist, n_forward):
+        assert n_hist <= index + 1, 'Error:Invalid number of historical observations.'
+        start_hist    = index - n_hist + 1
+        end_hist      = index + 1
+        start_forward = index
+        end_forward   = index + n_forward + 1
+        return start_hist, end_hist, start_forward, end_forward
+
+    def run_episode(self, index, n_hist, n_forward, trade_th, stop_loss, cl=0.05):
+        start_hist, end_hist, start_forward, end_forward = self.get_indices(index, n_hist, n_forward)
         sp = self.calibrate(start_hist, end_hist, cl)
         if sp is not None:
-            time, price, order = self.gen_order(start_forward, end_forward, trade_th, stop_loss)
+            time, price, order, gross_exp = self.gen_order(start_forward, end_forward, trade_th, stop_loss)
             trade_record = self.gen_trade_record(time, price, order)
-
-
+            returns      = trade_record['profit'] / gross_exp
+            reward       = returns.mean()
+        else:
+            reward = None
+        return reward

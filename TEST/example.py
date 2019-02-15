@@ -59,11 +59,11 @@ print('Sync processing time: {time}s.'.format(time=end-start))
 
 import pandas as pd
 import numpy as np
-from MAIN.Strategy import EGCoint
+from MAIN.Strategy import Cointegration
 import matplotlib.pyplot as plt
 a = pd.read_csv(r'C:\Users\lk258jt\PycharmProjects\Reinforcement-Learning-in-Pair-Trading\FILE\AAPL.csv')
 b = pd.read_csv(r'C:\Users\lk258jt\PycharmProjects\Reinforcement-Learning-in-Pair-Trading\FILE\MSFT.csv')
-o = EGCoint(a,b,'date','close')
+o = Cointegration(a,b,'date','close')
 start = 1100
 end = 1200
 sp = o.calibrate(start,end,0.1)
@@ -206,3 +206,6 @@ trade_record2 = {'trade_time': trade_time,
 
 end = timer()
 print(end-start)
+
+
+

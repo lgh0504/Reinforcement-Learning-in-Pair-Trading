@@ -1,7 +1,7 @@
 pandas
 numpy
 scipy
-sklearn
+scikit-learn
 matplotlib
 tensorflow
 aiohttp
