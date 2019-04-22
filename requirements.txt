@@ -1,0 +1,11 @@
+pandas
+numpy
+scipy
+scikit-learn
+matplotlib
+tensorflow
+aiohttp
+statsmodels
+patsy
+python_version=='3.7'
+pyprind
