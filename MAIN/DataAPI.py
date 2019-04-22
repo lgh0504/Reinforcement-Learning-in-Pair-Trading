@@ -6,7 +6,7 @@ def get_src_cls(source_name):
     return getattr(sys.modules[__name__], source_name)
 
 
-class Tiingo:
+class Tiingo(object):
 
     @staticmethod
     def get_url_intraday(ticker, target_date, freq, token):

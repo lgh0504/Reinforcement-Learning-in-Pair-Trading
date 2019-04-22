@@ -2,6 +2,11 @@ from statsmodels.tsa.stattools import coint
 from sklearn.linear_model import LinearRegression
 import pandas as pd
 import numpy as np
+import sys
+
+
+def get_src_cls(source_name):
+    return getattr(sys.modules[__name__], source_name)
 
 
 class Cointegration(object):
@@ -156,7 +161,7 @@ class Cointegration(object):
         end_forward   = index + n_forward + 1
         return start_hist, end_hist, start_forward, end_forward
 
-    def run_episode(self, index, n_hist, n_forward, trade_th, stop_loss, cl=0.05):
+    def process(self, index, n_hist, n_forward, trade_th, stop_loss, cl=0.05):
         start_hist, end_hist, start_forward, end_forward = self.get_indices(index, n_hist, n_forward)
         sp = self.calibrate(start_hist, end_hist, cl)
         if sp is not None:

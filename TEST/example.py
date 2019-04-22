@@ -1,7 +1,7 @@
 import datetime
 import time
 import pandas as pd
-from UTIL import aioutil, dateutil, fileutil
+from UTIL import AsyncIO, DateTime
 from MAIN import DataAPI
 
 
@@ -22,15 +22,15 @@ ticker_list = [ticker for pair in pairs for ticker in pair]
 start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d').date()
 end_date   = datetime.datetime.strptime(end_date,   '%Y-%m-%d').date()
 
-period   = dateutil.get_dates_weekday(start_date, end_date)
+period   = DateTime.get_dates_weekday(start_date, end_date)
 data_cls = DataAPI.get_src_cls('Tiingo')
 paras    = [{'url': data_cls.get_url_intraday(ticker, date, freq, token)} for date in period]
 
 
 # Example of asyncio data fetching.
 start   = time.time()
-loop    = aioutil.create_loop()
-tasks   = aioutil.create_tasks(loop, paras, data_cls.fetch_data_async)
+loop    = AsyncIO.create_loop()
+tasks   = AsyncIO.create_tasks(loop, paras, data_cls.fetch_data_async)
 results = loop.run_until_complete(tasks)
 loop.close()
 output  = pd.DataFrame()
@@ -59,8 +59,8 @@ print('Sync processing time: {time}s.'.format(time=end-start))
 
 import pandas as pd
 import numpy as np
-from MAIN.Strategy import Cointegration
-import matplotlib.pyplot as plt
+from STRATEGY.Cointegration import Cointegration
+
 a = pd.read_csv(r'C:\Users\lk258jt\PycharmProjects\Reinforcement-Learning-in-Pair-Trading\FILE\AAPL.csv')
 b = pd.read_csv(r'C:\Users\lk258jt\PycharmProjects\Reinforcement-Learning-in-Pair-Trading\FILE\MSFT.csv')
 o = Cointegration(a,b,'date','close')
